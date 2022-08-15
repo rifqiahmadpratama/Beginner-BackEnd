@@ -14,13 +14,13 @@ const productController = {
   getAllproduct: async (req, res) => {
     try {
       const currentPage = Number(req.query.currentPage) || 1;
-      const numberPerPage = Number(req.query.numberPerPage) || 5;
-      const startPage = (currentPage - 1) * numberPerPage;
+      const numberPage = Number(req.query.numberPage) || 5;
+      const startPage = (currentPage - 1) * numberPage;
       const sortby = req.query.sortby || "id";
       const sort = req.query.sort || "DESC";
       console.log(sort);
       const result = await productModel.selectAll(
-        numberPerPage,
+        numberPage,
         startPage,
         sort,
         sortby
@@ -29,12 +29,12 @@ const productController = {
         rows: [count],
       } = await productModel.countproduct();
       const totalData = parseInt(count.count);
-      const totalPage = Math.ceil(totalData / numberPerPage);
+      const totalPage = Math.ceil(totalData / numberPage);
       console.log(result);
       res.status(200).json({
         pagination: {
           currentPage: currentPage,
-          numberPerPage: numberPerPage,
+          numberPage: numberPage,
           totalData: totalData,
           totalPage: totalPage,
         },

@@ -4,21 +4,18 @@ const morgan = require("morgan");
 const cors = require("cors");
 const createError = require("http-errors");
 const helmet = require("helmet");
-let app = express();
 
-// const restify = require("restify");
-// const xss = require("xss-clean");
-
-// app = restify.createServer();
+const app = express();
 
 const productRouter = require("./src/routes/product");
 const categoryRouter = require("./src/routes/category");
 const paymentRouter = require("./src/routes/payment");
 const transaksiRouter = require("./src/routes/transaksi");
 const transaksi_detailRouter = require("./src/routes/transaksi_detail");
-
+const host = process.env.DB_HOST;
+const port = process.env.PORT;
 //app.use(restify.bodyParser());
-//app.use(xss());
+
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
@@ -33,7 +30,7 @@ app.use("/transaksi_detail", transaksi_detailRouter);
 app.all("*", (req, res, next) => {
   next(new createError.NotFound());
 });
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   const messageError = err.message || "internal server error";
   const statusCode = err.status || 500;
 
@@ -42,8 +39,6 @@ app.use((err, req, res) => {
   });
 });
 
-const host = process.env.DB_HOST;
-const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`server running on http://${host}:${port}`);
 });

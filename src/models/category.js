@@ -7,9 +7,8 @@ const searchKeywordsCategory = (keywords) => {
   ]);
 };
 
-const selectAll = (numberPerPage, startPage, sort, sortby) => {
-  return Pool.query(`SELECT * FROM category ORDER BY ${sortby} ${sort}
-LIMIT ${numberPerPage} OFFSET ${startPage}`);
+const selectAll = () => {
+  return Pool.query(`SELECT * FROM category`);
 };
 const select = (id) => {
   return Pool.query(`select * from category where id=${id}`);

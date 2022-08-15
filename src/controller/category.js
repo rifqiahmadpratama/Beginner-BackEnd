@@ -12,37 +12,10 @@ const categoryController = {
     }
   },
   getAllCategory: async (req, res) => {
-    try {
-      const currentPage = Number(req.query.currentPage) || 1;
-      const numberPerPage = Number(req.query.numberPerPage) || 5;
-      const startPage = (currentPage - 1) * numberPerPage;
-      const sortby = req.query.sortby || "name";
-      const sort = req.query.sort || "DESC";
-      console.log(sort);
-      const result = await categoryModel.selectAll(
-        numberPerPage,
-        startPage,
-        sort,
-        sortby
-      );
-      const {
-        rows: [count],
-      } = await categoryModel.countCategory();
-      const totalData = parseInt(count.count);
-      const totalPage = Math.ceil(totalData / numberPerPage);
-      console.log(result);
-      res.status(200).json({
-        pagination: {
-          currentPage: currentPage,
-          numberPerPage: numberPerPage,
-          totalData: totalData,
-          totalPage: totalPage,
-        },
-        data: result.rows,
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    categoryModel
+      .selectAll()
+      .then((result) => res.json(result.rows))
+      .catch((err) => res.send(err));
   },
   getCategory: (req, res) => {
     const id = Number(req.params.id);
